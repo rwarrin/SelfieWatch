@@ -61,7 +61,7 @@ end
 local function SelfieWatch_OnEvent(self, event, ...)
     if(g_IsInCombat ~= InCombatLockdown()) then
         g_IsInCombat = InCombatLockdown();
-        print("Switching combat state to " .. g_IsInCombat);
+        print("Switching combat state to ",  g_IsInCombat);
         if(g_IsInCombat) then
             print("Create a new selfie tracking object");
             g_Selfies = nil;
