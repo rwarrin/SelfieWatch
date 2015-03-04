@@ -3,17 +3,22 @@ local selfieWatch = CreateFrame("FRAME", "selfieFrame", UIParent)
 local g_IsInCombat = false;
 local g_Selfies = {};
 
+-- writes the message to the chosen channel
+local function SelfieWatch_WriteToChannel(message)
+    SendChatMessage(message, "GUILD");
+end
+
 -- logs the in-combat selfie event
 local function SelfieWatch_LogSelfie(unitName)
     if(not g_Selfies) then
         g_Selfies = {};
     end
 
-    if(not g_Selfies.unitName) then
-        g_Selfies.unitName = {};
+    if(g_Selfies[unitName] == nil) then
+        g_Selfies[unitName] = { count = 0 };
     end
 
-    g_Selfies.unitName.count = 1;
+    g_Selfies[unitName].count = g_Selfies[unitName].count + 1;
 end
 
 -- decides whether or not a selfie should be tracked
@@ -35,19 +40,28 @@ local function SelfieWatch_OnSelfieTaken(sourceGUID)
 
     -- at this point the player or someone in the raid or party has taken a
     -- selfie in combat
-    print("SELFIE ALERT: " , name , " (" , raceName , ", " , className , ")");
-    SelfieWatch_LogSelfie(unitName);
+    print("SELFIE ALERT: " .. name .. " (" .. raceName .. ", " .. className .. ")");
+    SelfieWatch_LogSelfie(name);
 end
 
 -- write the selfies taken to the output stream
 local function SelfieWatch_AnnounceSelfiesTaken()
+    if(g_Selfies == nil) then
+        return;
+    end
+
+    SelfieWatch_WriteToChannel("IN-COMBAT-SELFIES TAKEN");
+    for key, unitName in pairs(g_Selfies) do
+        SelfieWatch_WriteToChannel(key .. ": " .. g_Selfies[key].count);
+        print("Selfies take by " .. key .. ": " .. g_Selfies[key].count);
+    end
 end
 
 -- handles events registered by the addon
 local function SelfieWatch_OnEvent(self, event, ...)
     if(g_IsInCombat ~= InCombatLockdown()) then
         g_IsInCombat = InCombatLockdown();
-        print("Switching combat state to ", g_IsInCombat);
+        print("Switching combat state to " .. g_IsInCombat);
         if(g_IsInCombat) then
             print("Create a new selfie tracking object");
             g_Selfies = nil;
@@ -73,7 +87,7 @@ end
 
 -- handles slash commands
 local function SelfieWatch_CommandHandler(command)
-    print("Selfie command: ", command);
+    print("Selfie command: " .. command);
 end
 
 -- register events
