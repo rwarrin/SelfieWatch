@@ -3,6 +3,19 @@ local selfieWatch = CreateFrame("FRAME", "selfieFrame", UIParent)
 local g_IsInCombat = false;
 local g_Selfies = {};
 
+-- logs the in-combat selfie event
+local function SelfieWatch_LogSelfie(unitName)
+    if(not g_Selfies) then
+        g_Selfies = {};
+    end
+
+    if(not g_Selfies.unitName) then
+        g_Selfies.unitName = {};
+    end
+
+    g_Selfies.unitName.count = 1;
+end
+
 -- decides whether or not a selfie should be tracked
 local function SelfieWatch_OnSelfieTaken(sourceGUID)
     -- if not in a combat state then don't track selfies
@@ -26,15 +39,6 @@ local function SelfieWatch_OnSelfieTaken(sourceGUID)
     SelfieWatch_LogSelfie(unitName);
 end
 
--- logs the in-combat selfie event
-local function SelfieWatch_LogSelfie(unitName)
-    if(g_Selfies[unitName] == nil) then
-        g_Selfies[unitName] = { count: 0 };
-    end
-
-    g_Selfies[unitName].count = 1;
-end
-
 -- write the selfies taken to the output stream
 local function SelfieWatch_AnnounceSelfiesTaken()
 end
@@ -46,7 +50,7 @@ local function SelfieWatch_OnEvent(self, event, ...)
         print("Switching combat state to ", g_IsInCombat);
         if(g_IsInCombat) then
             print("Create a new selfie tracking object");
-            g_Selfies = {};
+            g_Selfies = nil;
         else
             print("Can print or do w/e here idc");
             SelfieWatch_AnnounceSelfiesTaken();
