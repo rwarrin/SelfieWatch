@@ -1,0 +1,8 @@
+## Interface: 60100
+## Title: Selfie Watch
+## Author: Synaptk
+## Notes: Track the number of selfies per combat session.
+## Version: 0.0.1
+
+core.lua
+
