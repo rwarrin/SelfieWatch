@@ -53,7 +53,7 @@ local function SelfieWatch_AnnounceSelfiesTaken()
     SelfieWatch_WriteToChannel("IN-COMBAT-SELFIES TAKEN");
     for key, unitName in pairs(g_Selfies) do
         SelfieWatch_WriteToChannel(key .. ": " .. g_Selfies[key].count);
-        print("Selfies take by " .. key .. ": " .. g_Selfies[key].count);
+        print("Selfies taken by " .. key .. ": " .. g_Selfies[key].count);
     end
 end
 
@@ -100,5 +100,6 @@ selfieWatch:SetScript("OnEvent", SelfieWatch_OnEvent);
 
 -- slash commands
 SLASH_SELFIEWATCH1 = "/sw";
+SLASH_SELFIEWATCH1 = "/selfiewatch";
 SlashCmdList["SELFIEWATCH"] =  SelfieWatch_CommandHandler;
 
