@@ -3,9 +3,14 @@ local selfieWatch = CreateFrame("FRAME", "selfieFrame", UIParent)
 local g_IsInCombat = false;
 local g_Selfies = {};
 
+-- channel names
+local GUILD = "GUILD";
+local OFFICER = "OFFICER";
+local PARTY = "PARTY";
+
 -- writes the message to the chosen channel
 local function SelfieWatch_WriteToChannel(message)
-    SendChatMessage(message, "GUILD");
+    SendChatMessage(message, GUILD);
 end
 
 -- logs the in-combat selfie event
